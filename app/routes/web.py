@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Annotated
-from io import BytesIO
 
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse
@@ -8,17 +7,24 @@ from fastapi.templating import Jinja2Templates
 
 from app.config import settings
 from app.services.diagnosis_engine import DiagnosisEngine
-from app.services.pdf_text_extractor import PdfTextExtractor
+from app.services.markdown_renderer import render_markdown
+from app.services.resume_markdown_pipeline import ResumeMarkdownPipeline
 from app.services.resume_section_parser import ResumeSectionParser
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+TEMPLATE_DIR = Path(__file__).resolve().parents[1] / "templates"
+templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 
 
 def extract_and_analyze_resume(content: bytes) -> dict:
-    raw_text = PdfTextExtractor().extract(BytesIO(content))
-    parsed = ResumeSectionParser().parse(raw_text)
-    return DiagnosisEngine().analyze(parsed).model_dump()
+    markdown_result = ResumeMarkdownPipeline().process(content)
+    parsed = ResumeSectionParser().parse(markdown_result.normalized_markdown)
+    analysis = DiagnosisEngine().analyze(parsed)
+    analysis.raw_markdown = markdown_result.raw_markdown
+    analysis.normalized_markdown = markdown_result.normalized_markdown
+    analysis.used_fallback = markdown_result.used_fallback
+    analysis.fallback_reason = markdown_result.fallback_reason
+    return analysis.model_dump()
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -57,5 +63,7 @@ async def analyze_resume(
             "request": request,
             "title": "分析结果",
             "analysis": analysis,
+            "raw_markdown_html": render_markdown(analysis["raw_markdown"]),
+            "normalized_markdown_html": render_markdown(analysis["normalized_markdown"]),
         },
     )

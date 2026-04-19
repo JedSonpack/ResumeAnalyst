@@ -14,3 +14,10 @@ class ParsedResume(BaseModel):
     internships: list[ResumeSection] = Field(default_factory=list)
     competitions: list[ResumeSection] = Field(default_factory=list)
     extras: list[ResumeSection] = Field(default_factory=list)
+
+
+class MarkdownPipelineResult(BaseModel):
+    raw_markdown: str
+    normalized_markdown: str
+    used_fallback: bool = False
+    fallback_reason: str | None = None

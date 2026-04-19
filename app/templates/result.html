@@ -60,5 +60,23 @@
       {% endfor %}
     </ul>
   </article>
+
+  <article class="result-panel markdown-panel">
+    <h2>Markdown 解析结果</h2>
+    <p>降级状态：{{ "是" if analysis.used_fallback else "否" }}</p>
+    <p>降级原因：{{ analysis.fallback_reason or "无" }}</p>
+    <div class="markdown-compare">
+      <section class="markdown-column">
+        <h3>原始 Markdown</h3>
+        <p class="markdown-note">来自 PDF 提取与清洗后的原始结构。</p>
+        <div class="markdown-preview">{{ raw_markdown_html }}</div>
+      </section>
+      <section class="markdown-column">
+        <h3>整理后 Markdown</h3>
+        <p class="markdown-note">小模型整理后的结构化结果。</p>
+        <div class="markdown-preview">{{ normalized_markdown_html }}</div>
+      </section>
+    </div>
+  </article>
 </section>
 {% endblock %}

@@ -1,5 +1,14 @@
 .venv/
+.env
 __pycache__/
 .pytest_cache/
 *.pyc
 *.egg-info/
+docs
+*.md
+*.pdf
+*.log
+
+test.py
+test_markitdown_postprocess.py
+

@@ -17,6 +17,10 @@ class RewriteSuggestion(BaseModel):
 class ResumeAnalysis(BaseModel):
     overall_score: int
     summary: str
+    raw_markdown: str = ""
+    normalized_markdown: str = ""
+    used_fallback: bool = False
+    fallback_reason: str | None = None
     dimension_scores: list[DimensionScore] = Field(default_factory=list)
     top_issues: list[str] = Field(default_factory=list)
     risk_flags: list[str] = Field(default_factory=list)

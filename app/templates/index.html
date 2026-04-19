@@ -7,10 +7,47 @@
   {% if message %}
   <p class="message">{{ message }}</p>
   {% endif %}
-  <form class="upload-card" method="post" action="/analyze" enctype="multipart/form-data">
+  <form
+    id="resume-upload-form"
+    class="upload-card"
+    method="post"
+    action="/analyze"
+    enctype="multipart/form-data"
+  >
     <label for="resume">选择简历文件</label>
     <input id="resume" type="file" name="resume" accept="application/pdf" />
-    <button type="submit">上传 PDF 简历</button>
+    <button id="upload-submit-button" type="submit">上传 PDF 简历</button>
   </form>
 </section>
+
+<section id="loading-overlay" class="loading-overlay" aria-hidden="true">
+  <div class="loading-card">
+    <p class="eyebrow">正在解析简历</p>
+    <h2>请稍等，系统正在处理你的 PDF</h2>
+    <p class="loading-copy">当前会依次完成 PDF 提取、Markdown 整理和诊断分析。</p>
+    <ul class="loading-steps">
+      <li>正在提取 PDF 内容</li>
+      <li>正在整理 Markdown 结构</li>
+      <li>正在生成诊断与评分</li>
+    </ul>
+    <div class="loading-spinner" aria-hidden="true"></div>
+  </div>
+</section>
+
+<script>
+  const uploadForm = document.getElementById("resume-upload-form");
+  const uploadButton = document.getElementById("upload-submit-button");
+  const loadingOverlay = document.getElementById("loading-overlay");
+  const fileInput = document.getElementById("resume");
+
+  uploadForm?.addEventListener("submit", (event) => {
+    if (!fileInput?.files?.length) {
+      return;
+    }
+
+    uploadButton?.setAttribute("disabled", "disabled");
+    loadingOverlay?.classList.add("is-active");
+    loadingOverlay?.setAttribute("aria-hidden", "false");
+  });
+</script>
 {% endblock %}

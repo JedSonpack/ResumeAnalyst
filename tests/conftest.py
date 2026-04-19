@@ -1,9 +1,10 @@
+import importlib
+
 import pytest
 from fastapi.testclient import TestClient
-
-from app.main import create_app
 
 
 @pytest.fixture
 def client():
-    return TestClient(create_app())
+    main_module = importlib.import_module("app.main")
+    return TestClient(main_module.create_app())
