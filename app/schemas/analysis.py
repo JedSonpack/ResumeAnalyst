@@ -7,6 +7,13 @@ class DimensionScore(BaseModel):
     reason: str
 
 
+class RewriteSuggestion(BaseModel):
+    section_title: str
+    original_problem: str
+    rewrite_direction: str
+    example: str
+
+
 class ResumeAnalysis(BaseModel):
     overall_score: int
     summary: str
@@ -15,3 +22,4 @@ class ResumeAnalysis(BaseModel):
     risk_flags: list[str] = Field(default_factory=list)
     strengths: list[str] = Field(default_factory=list)
     weaknesses: list[str] = Field(default_factory=list)
+    rewrite_suggestions: list[RewriteSuggestion] = Field(default_factory=list)
