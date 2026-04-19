@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">面向实习和校招的简历诊断</p>
+  <h1>简历诊断助手</h1>
+  <p class="intro">上传 PDF 简历，获取评分、问题定位和改写建议。</p>
+  <form class="upload-card">
+    <label for="resume">选择简历文件</label>
+    <input id="resume" type="file" name="resume" accept="application/pdf" />
+    <button type="submit">上传 PDF 简历</button>
+  </form>
+</section>
+{% endblock %}
