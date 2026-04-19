@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="result-hero">
+  <p class="eyebrow">严格筛选视角</p>
+  <h1>简历诊断结果</h1>
+  <div class="score-card">
+    <h2>{{ analysis.summary }}</h2>
+    <p class="score">总分：{{ analysis.overall_score }}</p>
+  </div>
+</section>
+
+<section class="result-grid">
+  <article class="result-panel">
+    <h2>维度评分</h2>
+    <ul>
+      {% for item in analysis.dimension_scores %}
+      <li>{{ item.name }}：{{ item.score }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="result-panel">
+    <h2>关键问题</h2>
+    <ul>
+      {% for issue in analysis.top_issues %}
+      <li>{{ issue }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="result-panel">
+    <h2>高风险提示</h2>
+    <ul>
+      {% for item in analysis.risk_flags %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="result-panel">
+    <h2>改写建议</h2>
+    {% for item in analysis.rewrite_suggestions %}
+    <div class="suggestion-card">
+      <h3>{{ item.section_title }}</h3>
+      <p>{{ item.original_problem }}</p>
+      <p>{{ item.rewrite_direction }}</p>
+      <p>{{ item.example }}</p>
+    </div>
+    {% endfor %}
+  </article>
+
+  <article class="result-panel">
+    <h2>亮点与短板</h2>
+    <ul>
+      {% for item in analysis.strengths %}
+      <li>{{ item }}</li>
+      {% endfor %}
+      {% for item in analysis.weaknesses %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+</section>
+{% endblock %}
