@@ -44,8 +44,11 @@ async def analyze_resume(
     if Path(resume.filename).suffix.lower() not in settings.allowed_suffixes:
         raise HTTPException(status_code=400, detail="仅支持 PDF 文件")
 
-    content = await resume.read()
-    analysis = extract_and_analyze_resume(content)
+    try:
+        content = await resume.read()
+        analysis = extract_and_analyze_resume(content)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"PDF 解析失败：{exc}") from exc
 
     return templates.TemplateResponse(
         request=request,
