@@ -56,6 +56,14 @@ h1 {
   line-height: 1.7;
 }
 
+.message {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(189, 93, 56, 0.12);
+  color: #7a3117;
+}
+
 .upload-card {
   display: grid;
   gap: 12px;
